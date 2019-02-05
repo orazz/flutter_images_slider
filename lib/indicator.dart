@@ -18,13 +18,13 @@ class PageIndicator extends StatefulWidget {
 
   const PageIndicator(
       {Key key,
-        this.indicatorBackColor = Colors.white,
-        this.indicatorColor = Colors.grey,
-        @required this.controller,
-        @required this.length,
-        @required this.realPage,
-        this.indicatorSpace = 4.0,
-        this.indicatorWidth = 6})
+      this.indicatorBackColor = Colors.white,
+      this.indicatorColor = Colors.grey,
+      @required this.controller,
+      @required this.length,
+      @required this.realPage,
+      this.indicatorSpace = 4.0,
+      this.indicatorWidth = 6})
       : super(key: key);
 
   @override
@@ -103,21 +103,23 @@ class LinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.drawLine(
+        Offset(0.0, padding), Offset(size.width, padding), _backLinePaint);
 
-    canvas.drawLine(Offset(0.0, padding), Offset(size.width, padding), _backLinePaint);
+    final double index =
+        Helpers.getRealIndex(page, realPage.toDouble(), count.toDouble());
 
-    final double index = Helpers.getRealIndex(page, realPage.toDouble(), count.toDouble());
+    var selectedX = (size.width / count) * (index);
 
-    var selectedX = (size.width/count) * (index);
+    if (index > count - 1) {
+      double startX = index.abs() - (count - 1);
 
-    if(index > count-1) {
-
-      double startX = index.abs()-(count-1);
-
-      canvas.drawLine(Offset(startX-1, padding), Offset(startX * (size.width/count), padding), _indicatorLinePaint);
+      canvas.drawLine(Offset(startX - 1, padding),
+          Offset(startX * (size.width / count), padding), _indicatorLinePaint);
     }
 
-    canvas.drawLine(Offset(selectedX, padding), Offset(selectedX + (size.width/count), padding), _indicatorLinePaint);
+    canvas.drawLine(Offset(selectedX, padding),
+        Offset(selectedX + (size.width / count), padding), _indicatorLinePaint);
   }
 
   @override

@@ -33,11 +33,10 @@ class ImagesSlider extends StatefulWidget {
   final Color indicatorColor;
 
   ImagesSlider({
-    @required
-    this.items,
+    @required this.items,
     this.viewportFraction: 1.0,
     this.initialPage: 0,
-    this.aspectRatio: 16/9,
+    this.aspectRatio: 16 / 9,
     this.height,
     this.realPage: 10000,
     this.autoPlay: false,
@@ -52,8 +51,7 @@ class ImagesSlider extends StatefulWidget {
     this.indicatorWidth = 6,
     this.indicatorBackColor = Colors.amber,
     this.indicatorColor = Colors.blue,
-  }) :
-        pageController = new PageController(
+  }) : pageController = new PageController(
           viewportFraction: viewportFraction,
           initialPage: realPage + initialPage,
         );
@@ -72,22 +70,24 @@ class ImagesSlider extends StatefulWidget {
   }
 
   jumpToPage(int page) {
-
-    final index = Helpers.getRealIndex(pageController.page.toInt(), realPage, items.length);
-    return pageController.jumpToPage(pageController.page.toInt() + page - index);
+    final index = Helpers.getRealIndex(
+        pageController.page.toInt(), realPage, items.length);
+    return pageController
+        .jumpToPage(pageController.page.toInt() + page - index);
   }
 
   animateToPage(int page, {Duration duration, Curve curve}) {
-    final index = Helpers.getRealIndex(pageController.page.toInt(), realPage, items.length);
+    final index = Helpers.getRealIndex(
+        pageController.page.toInt(), realPage, items.length);
     return pageController.animateToPage(
         pageController.page.toInt() + page - index,
         duration: duration,
-        curve: curve
-    );
+        curve: curve);
   }
 }
 
-class _ImagesSliderState extends State<ImagesSlider> with TickerProviderStateMixin {
+class _ImagesSliderState extends State<ImagesSlider>
+    with TickerProviderStateMixin {
   int currentPage;
   Timer timer;
 
@@ -99,31 +99,21 @@ class _ImagesSliderState extends State<ImagesSlider> with TickerProviderStateMix
     if (widget.autoPlay) {
       timer = new Timer.periodic(widget.interval, (_) {
         widget.pageController.nextPage(
-            duration: widget.autoPlayDuration,
-            curve: widget.autoPlayCurve
-        );
+            duration: widget.autoPlayDuration, curve: widget.autoPlayCurve);
       });
     }
     widget.pageController.addListener(onScroll);
   }
 
   onScroll() {
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   getWrapper(Widget child) {
     if (widget.height != null) {
-      return Container(
-          height: widget.height,
-          child: child
-      );
+      return Container(height: widget.height, child: child);
     } else {
-      return AspectRatio(
-          aspectRatio: widget.aspectRatio,
-          child: child
-      );
+      return AspectRatio(aspectRatio: widget.aspectRatio, child: child);
     }
   }
 
@@ -143,7 +133,7 @@ class _ImagesSliderState extends State<ImagesSlider> with TickerProviderStateMix
         realPage: widget.realPage,
         indicatorBackColor: widget.indicatorBackColor,
         indicatorColor: widget.indicatorColor,
-        indicatorSpace: widget.indicatorWidth/2,
+        indicatorSpace: widget.indicatorWidth / 2,
         indicatorWidth: widget.indicatorWidth,
       ),
     );
@@ -172,23 +162,29 @@ class _ImagesSliderState extends State<ImagesSlider> with TickerProviderStateMix
       children: <Widget>[
         NotificationListener<ScrollNotification>(
           child: Container(
-            height: widget.height ?? MediaQuery.of(context).size.width * (1 / widget.aspectRatio),
+            height: widget.height ??
+                MediaQuery.of(context).size.width * (1 / widget.aspectRatio),
             child: PageView.builder(
               onPageChanged: (int index) {
-                currentPage = Helpers.getRealIndex(index, widget.realPage, widget.items.length);
-                if (widget.updateCallback != null) widget.updateCallback(currentPage);
+                currentPage = Helpers.getRealIndex(
+                    index, widget.realPage, widget.items.length);
+                if (widget.updateCallback != null)
+                  widget.updateCallback(currentPage);
               },
               controller: widget.pageController,
               reverse: widget.reverse,
               itemBuilder: (BuildContext context, int i) {
-                final int index = Helpers.getRealIndex(i, widget.realPage, widget.items.length);
+                final int index = Helpers.getRealIndex(
+                    i, widget.realPage, widget.items.length);
                 return AnimatedBuilder(
                     animation: widget.pageController,
                     builder: (BuildContext context, child) {
                       // on the first render, the pageController.page is null,
                       // this is a dirty hack
-                      if (widget.pageController.position.minScrollExtent == null
-                          || widget.pageController.position.maxScrollExtent == null) {
+                      if (widget.pageController.position.minScrollExtent ==
+                              null ||
+                          widget.pageController.position.maxScrollExtent ==
+                              null) {
                         Future.delayed(Duration(microseconds: 1), () {
                           setState(() {});
                         });
@@ -197,18 +193,18 @@ class _ImagesSliderState extends State<ImagesSlider> with TickerProviderStateMix
                       double value = widget.pageController.page - i;
                       value = (1 - (value.abs() * 0.3)).clamp(0.0, 1.0);
 
-                      final double height = widget.height ?? MediaQuery.of(context).size.width * (1 / widget.aspectRatio);
-                      final double distortionValue = widget.distortion ? Curves.easeOut.transform(value) : 1.0;
+                      final double height = widget.height ??
+                          MediaQuery.of(context).size.width *
+                              (1 / widget.aspectRatio);
+                      final double distortionValue = widget.distortion
+                          ? Curves.easeOut.transform(value)
+                          : 1.0;
 
                       return Center(
                           child: SizedBox(
-                              height: distortionValue * height,
-                              child: child
-                          )
-                      );
+                              height: distortionValue * height, child: child));
                     },
-                    child: widget.items[index]
-                );
+                    child: widget.items[index]);
               },
             ),
           ),
@@ -224,4 +220,3 @@ class _ImagesSliderState extends State<ImagesSlider> with TickerProviderStateMix
     return false;
   }
 }
-

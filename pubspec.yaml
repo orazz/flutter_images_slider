@@ -1,11 +1,11 @@
 name: flutter_images_slider
 description:  A carousel slider widget, support infinite scroll and custom indicator, with autoplay feature.
-version: 0.0.1
+version: 0.0.2
 author: orazz <orazz.tm@gmail.com>
 homepage: https://github.com/orazz/flutter_images_slider
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.0.0-dev.23.0 <3.0.0"
 
 dependencies:
   flutter:
